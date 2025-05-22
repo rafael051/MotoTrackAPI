@@ -1,6 +1,18 @@
 # 🏍️ MotoTrackAPI - API REST
 
-API RESTful desenvolvida com **ASP.NET Core** para gerenciamento de motos, filiais, eventos, agendamentos e usuários.
+
+MotoTrackAPI é uma **API RESTful** desenvolvida em **ASP.NET Core** com **Entity Framework Core**, focada na **gestão de frotas de motocicletas** para sistemas de **locação** e **monitoramento**.
+
+A solução permite o gerenciamento completo das operações relacionadas a:
+
+✅ **Cadastro e manutenção de motos**  
+✅ **Administração de filiais**  
+✅ **Registro de eventos associados às motos**  
+✅ **Controle de agendamentos para manutenção ou retirada**  
+✅ **Gerenciamento de usuários com diferentes perfis de acesso**
+
+A aplicação segue as **boas práticas de arquitetura** e desenvolvimento de **APIs modernas**, integrando-se com o **banco de dados Oracle** e oferecendo uma interface de **documentação completa via Swagger (OpenAPI)**.
+
 
 ---
 
