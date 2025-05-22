@@ -133,22 +133,6 @@ API disponível em: `https://localhost:{porta}/swagger`
 ```
 204 No Content
 ```
-### 🏢 /api/filiais
-
-#### ✅ Cadastrar Filial
-`POST /api/filiais`
-
-```json
-{
-  "nome": "Filial Centro",
-  "endereco": "Rua A, 123",
-  "bairro": "Centro",
-  "cidade": "São Paulo",
-  "estado": "SP",
-  "cep": "01000-000",
-  "latitude": -23.5505,
-  "longitude": -46.6333
-}
 
 ---
 
