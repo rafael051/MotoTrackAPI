@@ -8,7 +8,7 @@ using Oracle.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace MotoTrackAPI.Migrations
+namespace MotoTrackAPI.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -17,157 +17,308 @@ namespace MotoTrackAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             OracleModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("MotoTrackAPI.Models.Agendamento", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)");
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_AGENDAMENTO");
 
-                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("DataHora")
-                        .HasColumnType("TIMESTAMP(7)");
+                    b.Property<DateTime>("DataAgendada")
+                        .HasColumnType("TIMESTAMP")
+                        .HasColumnName("DT_AGENDADA");
 
-                    b.Property<string>("Status")
+                    b.Property<DateTime?>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TIMESTAMP")
+                        .HasColumnName("DT_CRIACAO")
+                        .HasDefaultValueSql("SYSTIMESTAMP");
+
+                    b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR2(255)")
+                        .HasColumnName("DS_DESCRICAO");
+
+                    b.Property<long>("MotoId")
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_MOTO");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Agendamentos");
+                    b.HasIndex("MotoId")
+                        .HasDatabaseName("IX_AGENDAMENTO_MOTO");
+
+                    b.ToTable("TB_AGENDAMENTO", (string)null);
                 });
 
             modelBuilder.Entity("MotoTrackAPI.Models.Evento", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)");
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_EVENTO");
 
-                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DataHora")
-                        .HasColumnType("TIMESTAMP(7)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TIMESTAMP")
+                        .HasColumnName("DT_HR_EVENTO")
+                        .HasDefaultValueSql("SYSTIMESTAMP");
 
                     b.Property<string>("Localizacao")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR2(255)")
+                        .HasColumnName("DS_LOCALIZACAO");
 
                     b.Property<string>("Motivo")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR2(255)")
+                        .HasColumnName("DS_MOTIVO");
+
+                    b.Property<long>("MotoId")
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_MOTO");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(100)
+                        .HasColumnType("NVARCHAR2(100)")
+                        .HasColumnName("TP_EVENTO");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Eventos");
+                    b.HasIndex("MotoId")
+                        .HasDatabaseName("IX_EVENTO_MOTO");
+
+                    b.ToTable("TB_EVENTO", (string)null);
                 });
 
             modelBuilder.Entity("MotoTrackAPI.Models.Filial", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)");
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_FILIAL");
 
-                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Bairro")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(120)
+                        .HasColumnType("NVARCHAR2(120)")
+                        .HasColumnName("DS_BAIRRO");
 
                     b.Property<string>("Cep")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(20)
+                        .HasColumnType("NVARCHAR2(20)")
+                        .HasColumnName("NR_CEP");
 
                     b.Property<string>("Cidade")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(120)
+                        .HasColumnType("NVARCHAR2(120)")
+                        .HasColumnName("DS_CIDADE");
 
                     b.Property<string>("Endereco")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR2(255)")
+                        .HasColumnName("DS_ENDERECO");
 
                     b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(60)
+                        .HasColumnType("NVARCHAR2(60)")
+                        .HasColumnName("DS_ESTADO");
 
-                    b.Property<double>("Latitude")
-                        .HasColumnType("BINARY_DOUBLE");
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("BINARY_DOUBLE")
+                        .HasColumnName("VL_LATITUDE");
 
-                    b.Property<double>("Longitude")
-                        .HasColumnType("BINARY_DOUBLE");
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("BINARY_DOUBLE")
+                        .HasColumnName("VL_LONGITUDE");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(150)
+                        .HasColumnType("NVARCHAR2(150)")
+                        .HasColumnName("NM_FILIAL");
+
+                    b.Property<double?>("RaioGeofenceMetros")
+                        .HasColumnType("BINARY_DOUBLE")
+                        .HasColumnName("RAIO_GEOFENCE_M");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Filiais");
+                    b.ToTable("TB_FILIAL", (string)null);
                 });
 
             modelBuilder.Entity("MotoTrackAPI.Models.Moto", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)");
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_MOTO");
 
-                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("Ano")
-                        .HasColumnType("NUMBER(10)");
+                        .HasColumnType("NUMBER(10)")
+                        .HasColumnName("NR_ANO");
+
+                    b.Property<DateTime?>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TIMESTAMP")
+                        .HasColumnName("DT_CRIACAO")
+                        .HasDefaultValueSql("SYSTIMESTAMP");
+
+                    b.Property<long?>("FilialId")
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_FILIAL");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("BINARY_DOUBLE")
+                        .HasColumnName("VL_LATITUDE");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("BINARY_DOUBLE")
+                        .HasColumnName("VL_LONGITUDE");
 
                     b.Property<string>("Marca")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(120)
+                        .HasColumnType("NVARCHAR2(120)")
+                        .HasColumnName("NM_MARCA");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(120)
+                        .HasColumnType("NVARCHAR2(120)")
+                        .HasColumnName("NM_MODELO");
 
                     b.Property<string>("Placa")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(20)
+                        .HasColumnType("NVARCHAR2(20)")
+                        .HasColumnName("CD_PLACA");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(60)
+                        .HasColumnType("NVARCHAR2(60)")
+                        .HasColumnName("DS_STATUS");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Motos");
+                    b.HasIndex("FilialId");
+
+                    b.HasIndex("Placa")
+                        .IsUnique()
+                        .HasDatabaseName("UX_MOTO_PLACA");
+
+                    b.ToTable("TB_MOTO", (string)null);
                 });
 
             modelBuilder.Entity("MotoTrackAPI.Models.Usuario", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)");
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_USUARIO");
 
-                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(200)
+                        .HasColumnType("NVARCHAR2(200)")
+                        .HasColumnName("DS_EMAIL");
+
+                    b.Property<long?>("FilialId")
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID_FILIAL");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(150)
+                        .HasColumnType("NVARCHAR2(150)")
+                        .HasColumnName("NM_USUARIO");
 
                     b.Property<string>("Perfil")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(40)
+                        .HasColumnType("NVARCHAR2(40)")
+                        .HasColumnName("TP_PERFIL");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR2(255)")
+                        .HasColumnName("DS_SENHA");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuarios");
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("UX_USUARIO_EMAIL");
+
+                    b.HasIndex("FilialId");
+
+                    b.ToTable("TB_USUARIO", (string)null);
+                });
+
+            modelBuilder.Entity("MotoTrackAPI.Models.Agendamento", b =>
+                {
+                    b.HasOne("MotoTrackAPI.Models.Moto", "Moto")
+                        .WithMany()
+                        .HasForeignKey("MotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Moto");
+                });
+
+            modelBuilder.Entity("MotoTrackAPI.Models.Evento", b =>
+                {
+                    b.HasOne("MotoTrackAPI.Models.Moto", "Moto")
+                        .WithMany()
+                        .HasForeignKey("MotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Moto");
+                });
+
+            modelBuilder.Entity("MotoTrackAPI.Models.Moto", b =>
+                {
+                    b.HasOne("MotoTrackAPI.Models.Filial", "Filial")
+                        .WithMany("Motos")
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Filial");
+                });
+
+            modelBuilder.Entity("MotoTrackAPI.Models.Usuario", b =>
+                {
+                    b.HasOne("MotoTrackAPI.Models.Filial", "Filial")
+                        .WithMany()
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Filial");
+                });
+
+            modelBuilder.Entity("MotoTrackAPI.Models.Filial", b =>
+                {
+                    b.Navigation("Motos");
                 });
 #pragma warning restore 612, 618
         }

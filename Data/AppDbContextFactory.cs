@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// File: Data/AppDbContextFactory.cs
+using System;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace MotoTrackAPI.Data
 {
@@ -9,20 +11,57 @@ namespace MotoTrackAPI.Data
     {
         public AppDbContext CreateDbContext(string[] args)
         {
-            // Define a base do diretório como o atual
-            var basePath = Directory.GetCurrentDirectory();
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
 
-            // Carrega a configuração a partir do appsettings.json
+            // procura appsettings subindo diretórios se necessário
+            var basePath = Directory.GetCurrentDirectory();
+            var appsettingsPath = FindAppsettings(basePath);
+
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json")
+                .SetBasePath(appsettingsPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: false)
+                .AddEnvironmentVariables()
                 .Build();
 
-            // Cria o DbContext com a connection string
+            var connStr =
+                Environment.GetEnvironmentVariable("ORACLE_CONNSTR")
+                ?? configuration.GetConnectionString("OracleConnection")
+                ?? throw new InvalidOperationException(
+                    $"Connection string 'OracleConnection' não encontrada. Procurei em: {appsettingsPath}. " +
+                    $"Defina ORACLE_CONNSTR ou inclua em appsettings*.json.");
+
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseOracle(configuration.GetConnectionString("OracleConnection"));
+
+            optionsBuilder.UseOracle(connStr, oracle =>
+            {
+                // 🔧 garante que as migrations deste projeto sejam usadas em design-time
+                oracle.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
+
+                // Se quiser compat e sua versão suportar o enum, use:
+                // oracle.UseOracleSQLCompatibility(OracleSQLCompatibility.Version12);
+            });
+
+            if (string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase))
+            {
+                optionsBuilder.EnableDetailedErrors();
+                optionsBuilder.EnableSensitiveDataLogging();
+            }
 
             return new AppDbContext(optionsBuilder.Options);
+        }
+
+        /// <summary> Sobe diretórios até encontrar o appsettings.json. </summary>
+        private static string FindAppsettings(string startPath)
+        {
+            var dir = new DirectoryInfo(startPath);
+            while (dir != null)
+            {
+                var candidate = Path.Combine(dir.FullName, "appsettings.json");
+                if (File.Exists(candidate)) return dir.FullName;
+                dir = dir.Parent;
+            }
+            return startPath;
         }
     }
 }
