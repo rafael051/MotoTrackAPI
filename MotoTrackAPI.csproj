@@ -13,24 +13,37 @@
 
 	<ItemGroup>
 	  <Compile Remove="Migrations\**" />
+	  <Compile Remove="NovaPasta\**" />
+	  <Compile Remove="tests\**" />
 	  <Content Remove="Migrations\**" />
+	  <Content Remove="NovaPasta\**" />
+	  <Content Remove="tests\**" />
 	  <EmbeddedResource Remove="Migrations\**" />
+	  <EmbeddedResource Remove="NovaPasta\**" />
+	  <EmbeddedResource Remove="tests\**" />
 	  <None Remove="Migrations\**" />
+	  <None Remove="NovaPasta\**" />
+	  <None Remove="tests\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9">
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		  <PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.8" />
 		<PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.90" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.*" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.*" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.9" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\" />
 	</ItemGroup>
 
 </Project>
